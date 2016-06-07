@@ -53,7 +53,9 @@ public class ShardsTest extends SearchTestBase {
 		shardingStrategy.initialize( null, dps );
 		assertTrue( dps[1] == shardingStrategy.getIndexManagerForAddition( Animal.class, 1, "1", null ) );
 		assertTrue( dps[0] == shardingStrategy.getIndexManagerForAddition( Animal.class, 2, "2", null ) );
+		dps[0].flushAndReleaseResources();
 		dps[0].destroy();
+		dps[1].flushAndReleaseResources();
 		dps[1].destroy();
 	}
 

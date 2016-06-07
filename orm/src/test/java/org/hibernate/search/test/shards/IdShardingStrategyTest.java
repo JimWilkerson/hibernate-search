@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 import org.hibernate.search.indexes.spi.IndexManager;
 import org.hibernate.search.store.impl.IdHashShardingStrategy;
 import org.hibernate.search.testsupport.indexmanager.RamIndexManager;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +27,14 @@ public class IdShardingStrategyTest {
 		shardStrategy = new IdHashShardingStrategy();
 		shardStrategy.initialize( null, new IndexManager[] {
 				RamIndexManager.makeRamDirectory(), RamIndexManager.makeRamDirectory() } );
+	}
+	
+	@After
+	public void tearDown() throws Exception{
+		for(IndexManager im: shardStrategy.getIndexManagersForAllShards()){
+			im.flushAndReleaseResources();
+			im.destroy();
+		}
 	}
 
 	@Test
